@@ -3,9 +3,12 @@ package com.vino.preference
 import android.content.Context
 
 class VPM{
-    lateinit var sADGPreferences: VPreference
+    lateinit var sVreferences: VPreference
     fun initialize(context: Context) {
-        sADGPreferences = VPreference(context)
+        sVreferences = VPreference(context)
+    }
+    fun getPreference():VPreference{
+        return sVreferences
     }
 
     companion object {
