@@ -7,7 +7,10 @@ class VPM{
     fun initialize(context: Context) {
         sVreferences = VPreference(context)
     }
-    
+
+    fun getPreference():VPreference{
+        return sVreferences
+    }
 
 
     companion object {
