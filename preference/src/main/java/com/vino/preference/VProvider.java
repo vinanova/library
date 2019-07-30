@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class AGDProvider extends ContentProvider {
+public class VProvider extends ContentProvider {
     private static final int QUERY_GET = 1;
     private static final int QUERY_GET_ALL = 2;
     private static final int QUERY_CONTAINS = 3;
@@ -34,10 +34,10 @@ public class AGDProvider extends ContentProvider {
     public boolean onCreate() {
         mContext = getContext();
 
-        String authority = AGDContract.getAuthority(mContext);
-        mUriMatcher.addURI(authority, "*/*/" + AGDContract.QUERY_GET_ALL, QUERY_GET_ALL);
-        mUriMatcher.addURI(authority, "*/*/" + AGDContract.QUERY_GET, QUERY_GET);
-        mUriMatcher.addURI(authority, "*/*/" + AGDContract.QUERY_CONTAINS, QUERY_CONTAINS);
+        String authority = VContract.getAuthority(mContext);
+        mUriMatcher.addURI(authority, "*/*/" + VContract.QUERY_GET_ALL, QUERY_GET_ALL);
+        mUriMatcher.addURI(authority, "*/*/" + VContract.QUERY_GET, QUERY_GET);
+        mUriMatcher.addURI(authority, "*/*/" + VContract.QUERY_CONTAINS, QUERY_CONTAINS);
         return true;
     }
 
@@ -46,21 +46,21 @@ public class AGDProvider extends ContentProvider {
         Cursor cursor = null;
         List<String> paths = uri.getPathSegments();
         String name = paths.get(0);
-        boolean inMemory = Integer.parseInt(paths.get(1)) == ADGPreference.MODE_IN_MEMORY;
+        boolean inMemory = Integer.parseInt(paths.get(1)) == VPreference.MODE_IN_MEMORY;
         switch (mUriMatcher.match(uri)) {
             case QUERY_GET:
                 int type = Integer.parseInt(sortOrder);
                 switch (type) {
-                    case ADGPreference.TYPE_STRING:
+                    case VPreference.TYPE_STRING:
                         String string;
                         if (inMemory) {
                             string = (String) getFromMemoryPreferences(name, projection[0]);
                         } else {
                             string = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).getString(projection[0], null);
                         }
-                        cursor = new AGDCursor(string == null ? 0 : 1, string);
+                        cursor = new VCursor(string == null ? 0 : 1, string);
                         break;
-                    case ADGPreference.TYPE_STRING_SET:
+                    case VPreference.TYPE_STRING_SET:
                         Set<String> set;
                         if (inMemory) {
                             set = (Set<String>) getFromMemoryPreferences(name, projection[0]);
@@ -71,9 +71,9 @@ public class AGDProvider extends ContentProvider {
                         if (set != null) {
                             setJsonStr = stringSetToJSONArray(set).toString();
                         }
-                        cursor = new AGDCursor(set == null ? 0 : 1, setJsonStr);
+                        cursor = new VCursor(set == null ? 0 : 1, setJsonStr);
                         break;
-                    case ADGPreference.TYPE_INT:
+                    case VPreference.TYPE_INT:
                         int intVal;
                         if (inMemory) {
                             Object valObj = getFromMemoryPreferences(name, projection[0]);
@@ -81,9 +81,9 @@ public class AGDProvider extends ContentProvider {
                         } else {
                             intVal = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).getInt(projection[0], Integer.parseInt(selection));
                         }
-                        cursor = new AGDCursor(1, intVal);
+                        cursor = new VCursor(1, intVal);
                         break;
-                    case ADGPreference.TYPE_LONG:
+                    case VPreference.TYPE_LONG:
                         long longVal;
                         if (inMemory) {
                             Object valObj = getFromMemoryPreferences(name, projection[0]);
@@ -91,9 +91,9 @@ public class AGDProvider extends ContentProvider {
                         } else {
                             longVal = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).getLong(projection[0], Long.parseLong(selection));
                         }
-                        cursor = new AGDCursor(1, longVal);
+                        cursor = new VCursor(1, longVal);
                         break;
-                    case ADGPreference.TYPE_FLOAT:
+                    case VPreference.TYPE_FLOAT:
                         float floatVal;
                         if (inMemory) {
                             Object valObj = getFromMemoryPreferences(name, projection[0]);
@@ -101,9 +101,9 @@ public class AGDProvider extends ContentProvider {
                         } else {
                             floatVal = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).getFloat(projection[0], Float.parseFloat(selection));
                         }
-                        cursor = new AGDCursor(1, floatVal);
+                        cursor = new VCursor(1, floatVal);
                         break;
-                    case ADGPreference.TYPE_BOOLEAN:
+                    case VPreference.TYPE_BOOLEAN:
                         boolean booleanVal;
                         if (inMemory) {
                             Object valObj = getFromMemoryPreferences(name, projection[0]);
@@ -111,7 +111,7 @@ public class AGDProvider extends ContentProvider {
                         } else {
                             booleanVal = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).getBoolean(projection[0], Boolean.parseBoolean(selection));
                         }
-                        cursor = new AGDCursor(1, booleanVal ? 1 : 0);
+                        cursor = new VCursor(1, booleanVal ? 1 : 0);
                         break;
                 }
                 break;
@@ -133,32 +133,32 @@ public class AGDProvider extends ContentProvider {
                             json.put(key, JSONObject.NULL);
                         } else if (value instanceof String) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_STRING);
+                            array.put(VPreference.TYPE_STRING);
                             array.put(value);
                             json.put(key, array);
                         } else if (value instanceof Set) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_STRING_SET);
+                            array.put(VPreference.TYPE_STRING_SET);
                             array.put(stringSetToJSONArray((Set<String>) value));
                             json.put(key, array);
                         } else if (value instanceof Integer) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_INT);
+                            array.put(VPreference.TYPE_INT);
                             array.put(value);
                             json.put(key, array);
                         } else if (value instanceof Long) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_LONG);
+                            array.put(VPreference.TYPE_LONG);
                             array.put(value);
                             json.put(key, array);
                         } else if (value instanceof Float) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_FLOAT);
+                            array.put(VPreference.TYPE_FLOAT);
                             array.put(value);
                             json.put(key, array);
                         } else if (value instanceof Boolean) {
                             JSONArray array = new JSONArray();
-                            array.put(ADGPreference.TYPE_BOOLEAN);
+                            array.put(VPreference.TYPE_BOOLEAN);
                             array.put(value);
                             json.put(key, array);
                         }
@@ -166,7 +166,7 @@ public class AGDProvider extends ContentProvider {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                cursor = new AGDCursor(1, json.toString());
+                cursor = new VCursor(1, json.toString());
                 break;
             case QUERY_CONTAINS:
                 boolean contains;
@@ -177,7 +177,7 @@ public class AGDProvider extends ContentProvider {
                 } else {
                     contains = mContext.getSharedPreferences(name, Context.MODE_PRIVATE).contains(projection[0]);
                 }
-                cursor = new AGDCursor(1, contains ? 1 : 0);
+                cursor = new VCursor(1, contains ? 1 : 0);
                 break;
         }
         return cursor;
@@ -264,8 +264,8 @@ public class AGDProvider extends ContentProvider {
     public int update(@SuppressWarnings("NullableProblems") Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         List<String> paths = uri.getPathSegments();
         String name = paths.get(0);
-        boolean inMemory = Integer.parseInt(paths.get(1)) == ADGPreference.MODE_IN_MEMORY;
-        boolean clear = Boolean.parseBoolean(uri.getQueryParameter(AGDContract.PARAM_CLEAR));
+        boolean inMemory = Integer.parseInt(paths.get(1)) == VPreference.MODE_IN_MEMORY;
+        boolean clear = Boolean.parseBoolean(uri.getQueryParameter(VContract.PARAM_CLEAR));
         ArrayList<String> modifiedKeys = new ArrayList<>();
         if (inMemory) {
             synchronized (this) {
@@ -329,7 +329,7 @@ public class AGDProvider extends ContentProvider {
                     e.printStackTrace();
                 }
             }
-            if (Boolean.parseBoolean(uri.getQueryParameter(AGDContract.PARAM_IMMEDIATELY))) {
+            if (Boolean.parseBoolean(uri.getQueryParameter(VContract.PARAM_IMMEDIATELY))) {
                 editor.commit();
             } else {
                 editor.apply();

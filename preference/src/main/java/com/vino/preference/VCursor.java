@@ -3,7 +3,7 @@ package com.vino.preference;
 import android.database.AbstractCursor;
 import android.database.CursorWindow;
 
-class AGDCursor extends AbstractCursor {
+class VCursor extends AbstractCursor {
     private static final int FIELD_TYPE_NULL = 0;
     private static final int FIELD_TYPE_INTEGER = 1;
     private static final int FIELD_TYPE_FLOAT = 2;
@@ -13,7 +13,7 @@ class AGDCursor extends AbstractCursor {
     private int mCount;
     private Object mValue;
 
-    AGDCursor(int count, Object value) {
+    VCursor(int count, Object value) {
         mCount = count;
         mValue = value;
     }

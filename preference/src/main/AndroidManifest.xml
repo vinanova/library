@@ -5,7 +5,7 @@
             android:allowBackup="true"
             android:supportsRtl="true">
         <provider
-                android:name="com.vino.preference.AGDProvider"
+                android:name="com.vino.preference.VProvider"
                 android:authorities="@string/vino_author"
                 android:exported="false"/>
 

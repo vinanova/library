@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class ADGPreference implements SharedPreferences {
+public class VPreference implements SharedPreferences {
     static final int MODE_DEFAULT = 0;
     static final int MODE_IN_MEMORY = 1;
 
@@ -27,7 +27,7 @@ public class ADGPreference implements SharedPreferences {
     private final WeakHashMap<OnSharedPreferenceChangeListener, List<String>> mListeners = new WeakHashMap<>();
     private BroadcastReceiver mPreferencesChangeReceiver;
 
-    public ADGPreference(Context context) {
+    public VPreference(Context context) {
         mContext = context.getApplicationContext();
         mName = context.getPackageName();
         mMode = MODE_DEFAULT;
@@ -35,15 +35,15 @@ public class ADGPreference implements SharedPreferences {
 
 
 
-    /*public static ADGPreference getInstance(Context context) {
+    /*public static VPreference getInstance(Context context) {
         return getInstance(context, context.getPackageName(), MODE_DEFAULT);
     }
 
-    public static ADGPreference getInstance(Context context, String name, int mode) {
+    public static VPreference getInstance(Context context, String name, int mode) {
         synchronized (sPrefers) {
-            ADGPreference tp = sPrefers.get(name);
+            VPreference tp = sPrefers.get(name);
             if (tp == null) {
-                tp = new ADGPreference(context, name, mode);
+                tp = new VPreference(context, name, mode);
                 sPrefers.put(name, tp);
             }
             return tp;
@@ -56,7 +56,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET_ALL, null);
+            Uri uri = buildUri(VContract.QUERY_GET_ALL, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -73,23 +73,23 @@ public class ADGPreference implements SharedPreferences {
                             JSONArray array = json.getJSONArray(key);
                             int type = array.getInt(0);
                             switch (type) {
-                                case ADGPreference.TYPE_STRING:
+                                case VPreference.TYPE_STRING:
                                     map.put(key, array.getString(1));
                                     break;
-                                case ADGPreference.TYPE_STRING_SET:
-                                    map.put(key, AGDProvider.jsonArrayToStringSet(array.getJSONArray(1)));
+                                case VPreference.TYPE_STRING_SET:
+                                    map.put(key, VProvider.jsonArrayToStringSet(array.getJSONArray(1)));
                                     break;
-                                case ADGPreference.TYPE_INT:
+                                case VPreference.TYPE_INT:
                                     map.put(key, array.getInt(1));
                                     break;
-                                case ADGPreference.TYPE_LONG:
+                                case VPreference.TYPE_LONG:
                                     map.put(key, array.getLong(1));
                                     break;
-                                case ADGPreference.TYPE_FLOAT:
+                                case VPreference.TYPE_FLOAT:
                                     float f = (float) array.getDouble(1);
                                     map.put(key, f);
                                     break;
-                                case ADGPreference.TYPE_BOOLEAN:
+                                case VPreference.TYPE_BOOLEAN:
                                     map.put(key, array.getBoolean(1));
                                     break;
                             }
@@ -111,7 +111,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -134,14 +134,14 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
             ContentProvider localProvider = clientAndProvider.second;
             cursor = localProvider != null ? localProvider.query(uri, new String[]{key}, null, null, TYPE_STRING_SET + "") : contentResolver.query(uri, new String[]{key}, null, null, TYPE_STRING_SET + "");
             if (cursor != null && cursor.moveToNext()) {
-                return AGDProvider.jsonArrayToStringSet(new JSONArray(cursor.getString(0)));
+                return VProvider.jsonArrayToStringSet(new JSONArray(cursor.getString(0)));
             }
         } catch (Throwable t) {
             t.printStackTrace();
@@ -157,7 +157,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -180,7 +180,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -203,7 +203,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -226,7 +226,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_GET, null);
+            Uri uri = buildUri(VContract.QUERY_GET, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -249,7 +249,7 @@ public class ADGPreference implements SharedPreferences {
         ContentProviderClient client = null;
         Cursor cursor = null;
         try {
-            Uri uri = buildUri(AGDContract.QUERY_CONTAINS, null);
+            Uri uri = buildUri(VContract.QUERY_CONTAINS, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -288,13 +288,13 @@ public class ADGPreference implements SharedPreferences {
         }
         ContentProviderClient client = null;
         try {
-            Uri uri = buildUri(AGDContract.REGISTER, null);
+            Uri uri = buildUri(VContract.REGISTER, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
             ContentProvider localProvider = clientAndProvider.second;
             ContentValues values = new ContentValues();
-            values.put(AGDProvider.KEYS, (String) null);
+            values.put(VProvider.KEYS, (String) null);
             if (localProvider != null) {
                 localProvider.insert(uri, values);
             } else {
@@ -319,13 +319,13 @@ public class ADGPreference implements SharedPreferences {
         }
         ContentProviderClient client = null;
         try {
-            Uri uri = buildUri(AGDContract.REGISTER, null);
+            Uri uri = buildUri(VContract.REGISTER, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
             ContentProvider localProvider = clientAndProvider.second;
             ContentValues values = new ContentValues();
-            values.put(AGDProvider.KEYS, new JSONArray(keys).toString());
+            values.put(VProvider.KEYS, new JSONArray(keys).toString());
             if (localProvider != null) {
                 localProvider.insert(uri, values);
             } else {
@@ -354,7 +354,7 @@ public class ADGPreference implements SharedPreferences {
         }
         ContentProviderClient client = null;
         try {
-            Uri uri = buildUri(AGDContract.UNREGISTER, null);
+            Uri uri = buildUri(VContract.UNREGISTER, null);
             ContentResolver contentResolver = mContext.getContentResolver();
             Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
             client = clientAndProvider.first;
@@ -374,9 +374,9 @@ public class ADGPreference implements SharedPreferences {
             mPreferencesChangeReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String name = intent.getStringExtra(AGDProvider.EXTRA_NAME);
+                    String name = intent.getStringExtra(VProvider.EXTRA_NAME);
                     if (mName.equals(name)) {
-                        ArrayList<String> modifiedKeys = intent.getStringArrayListExtra(AGDProvider.EXTRA_KEYS);
+                        ArrayList<String> modifiedKeys = intent.getStringArrayListExtra(VProvider.EXTRA_KEYS);
                         ArrayList<Pair<OnSharedPreferenceChangeListener, String>> listeners = new ArrayList<>();
                         synchronized (mListeners) {
                             for (Map.Entry<OnSharedPreferenceChangeListener, List<String>> entry : mListeners.entrySet()) {
@@ -391,17 +391,17 @@ public class ADGPreference implements SharedPreferences {
                         }
                         for (int i = listeners.size() - 1; i >= 0; i--) {
                             Pair<OnSharedPreferenceChangeListener, String> pair = listeners.get(i);
-                            pair.first.onSharedPreferenceChanged(ADGPreference.this, pair.second);
+                            pair.first.onSharedPreferenceChanged(VPreference.this, pair.second);
                         }
                     }
                 }
             };
-            mContext.registerReceiver(mPreferencesChangeReceiver, new IntentFilter(AGDProvider.ACTION_PREFERENCES_CHANGE));
+            mContext.registerReceiver(mPreferencesChangeReceiver, new IntentFilter(VProvider.ACTION_PREFERENCES_CHANGE));
         }
     }
 
     private Uri buildUri(String path, HashMap<String, String> params) {
-        Uri.Builder builder = AGDContract.getAuthorityUri(mContext).buildUpon();
+        Uri.Builder builder = VContract.getAuthorityUri(mContext).buildUpon();
         builder.appendPath(mName).appendPath(mMode + "").appendPath(path);
         if (params != null) {
             for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -539,7 +539,7 @@ public class ADGPreference implements SharedPreferences {
                         contentValues.put(key, (String) value);
                     } else if (value instanceof HashSet) {
                         stringSetKeyList.add(key);
-                        stringSetValueArray.put(AGDProvider.stringSetToJSONArray((HashSet<String>) value));
+                        stringSetValueArray.put(VProvider.stringSetToJSONArray((HashSet<String>) value));
                     } else if (value instanceof Integer) {
                         contentValues.put(key, (Integer) value);
                     } else if (value instanceof Long) {
@@ -553,9 +553,9 @@ public class ADGPreference implements SharedPreferences {
                 ContentProviderClient client = null;
                 try {
                     HashMap<String, String> params = new HashMap<>();
-                    params.put(AGDContract.PARAM_CLEAR, mClear + "");
-                    params.put(AGDContract.PARAM_IMMEDIATELY, immediately + "");
-                    Uri uri = buildUri(AGDContract.UPDATE, params);
+                    params.put(VContract.PARAM_CLEAR, mClear + "");
+                    params.put(VContract.PARAM_IMMEDIATELY, immediately + "");
+                    Uri uri = buildUri(VContract.UPDATE, params);
                     ContentResolver contentResolver = mContext.getContentResolver();
                     Pair<ContentProviderClient, ContentProvider> clientAndProvider = getLocalContentProvider(contentResolver, uri);
                     client = clientAndProvider.first;

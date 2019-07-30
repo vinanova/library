@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-public final class AGDContract {
+public final class VContract {
     public static final String QUERY_GET = "get";
     public static final String QUERY_GET_ALL = "getall";
     public static final String QUERY_CONTAINS = "contains";
